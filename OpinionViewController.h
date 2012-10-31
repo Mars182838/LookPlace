@@ -18,8 +18,8 @@
 @property (retain, nonatomic) IBOutlet UILabel *opinionLabel;
 @property (retain, nonatomic) IBOutlet UILabel *email;
 @property (retain, nonatomic) IBOutlet UILabel *numberLabel;
-@property (retain, nonatomic) IBOutlet UITextView *opinionTextView;
-@property (retain, nonatomic) IBOutlet UITextField *emailTextField;
+@property (retain, nonatomic) IBOutlet UITextView *opinionTextView;//意见输入框
+@property (retain, nonatomic) IBOutlet UITextField *emailTextField;//邮箱输入框
 @property (nonatomic, retain) UIToolbar *toolbar;
 
 - (IBAction)buttonPress:(id)sender;

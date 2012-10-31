@@ -100,7 +100,6 @@
     NSString *refreshToken = [self getValueFromString:q withName:@"refresh_token"];
     NSString *expTime = [self getValueFromString:q withName:@"expires_in"];
     NSString *uid = [self getValueFromString:q withName:@"uid"];
-    //NSString *remindIn = [self getValueFromString:q withName:@"remind_in"];
     
     TokenModel *tokenModel = [[TokenModel alloc] init];
     tokenModel.weiboType = SINA_WEIBO;
@@ -109,8 +108,6 @@
     tokenModel.userID = uid;
     tokenModel.expireTime = expTime;
     tokenModel.extraInfo = oauth2String;
-
-    NSLog(@"token model is %@", tokenModel);
     if ([_delegate respondsToSelector:@selector(oauthControllerSaveToken:withTokenModel:)]) {
         [_delegate oauthControllerSaveToken:self withTokenModel:tokenModel];
     }
@@ -126,7 +123,6 @@
     NSString *getToken = [NSString stringWithFormat:
                           @"https://open.t.qq.com/cgi-bin/oauth2/access_token?client_id=%@&client_secret=%@&redirect_uri=%@&grant_type=authorization_code&code=%@", 
                           TENCENT_APP_KEY, TENCENT_APP_SECRET, TENCENT_CALLBACK, code];
-//    NSLog(@"token url is %@", getToken);
     NSURL *getTokenURL = [NSURL URLWithString:getToken];
     NSString *tokenString = [NSString stringWithContentsOfURL:getTokenURL encoding:NSUTF8StringEncoding error:nil];
     // tokenString is access_token=7f2096d70b49a9ae70f8b7ec1eb93d10&expires_in=604800&refresh_token=0026fe6e66ac7d659dac47dfcac494d6&name=oyangjian001
@@ -157,9 +153,7 @@
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
     
     // 这里是几个重定向，将每个重定向的网址遍历，如果遇到＃号，则重定向到自己申请时候填写的网址，后面会附上access_token的值
-    NSURL *url = [request URL];
-    NSLog(@"webview's url = %@",url);
-    
+    NSURL *url = [request URL];    
     if (_weiboType == TENCENT_WEIBO) 
     {
         // http://www.1000phone.com/?code=5b22f613ce98511ac6b1c1dccc35a1ee&openid=6E2D92FFD383EF67410284F536F832AA&openkey=1C8E1BF014179E4DB89D949005A72944

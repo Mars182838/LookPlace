@@ -154,7 +154,6 @@ static OAuthLoginController *root;
             expirationDate = [NSDate dateWithTimeIntervalSinceNow:expVal];
             [[NSUserDefaults standardUserDefaults]setObject:expirationDate forKey:TENCENT_USER_STORE_EXPIRATION_DATE];
             [[NSUserDefaults standardUserDefaults] synchronize];
-//            NSLog(@"qianfeng time = %@",expirationDate);
         } 
     } 
     if (token) {

@@ -85,6 +85,8 @@
     theSpan.longitudeDelta = 0.01f; 
     theRegion.center = location; 
     theRegion.span = theSpan;
+    
+    [locationManager stopUpdatingLocation];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

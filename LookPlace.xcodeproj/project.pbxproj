@@ -405,7 +405,6 @@
 		0FCA7C8E1632883B0019C762 /* BuildingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BuildingViewController.m; sourceTree = "<group>"; };
 		0FCA7C8F1632883B0019C762 /* BuildingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BuildingViewController.xib; sourceTree = "<group>"; };
 		0FCE391C16338B3F0061ED30 /* BuildingViewControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BuildingViewControllerDelegate.h; sourceTree = "<group>"; };
-		0FEBB36016390D7500D37164 /* dataBase.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; name = dataBase.sqlite; path = "../资源/dataBase.sqlite"; sourceTree = "<group>"; };
 		0FF65C40162FCDBC0093B8E8 /* customTabelViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = customTabelViewCell.h; sourceTree = "<group>"; };
 		0FF65C41162FCDBC0093B8E8 /* customTabelViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = customTabelViewCell.m; sourceTree = "<group>"; };
 		0FF65C4816300E720093B8E8 /* InfomationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfomationViewController.h; sourceTree = "<group>"; };
@@ -492,7 +491,6 @@
 			children = (
 				0F57DFCF162D49870027706C /* Const.h */,
 				0F0748C5162BD14600E6D32B /* LookPlace-Info.plist */,
-				0FEBB36016390D7500D37164 /* dataBase.sqlite */,
 				0F0748C6162BD14600E6D32B /* InfoPlist.strings */,
 				0F0748C9162BD14600E6D32B /* main.m */,
 				0F0748CB162BD14600E6D32B /* LookPlace-Prefix.pch */,
@@ -754,8 +752,8 @@
 				0F2393C5163E121D0066FDFC /* OAuthController.m */,
 				0F2393C4163E121D0066FDFC /* TokenModel.h */,
 				0F2393C3163E121D0066FDFC /* TokenModel.m */,
-				0F2393C6163E121D0066FDFC /* OAuthLoginController.m */,
 				0F2393C7163E121D0066FDFC /* OAuthLoginController.h */,
+				0F2393C6163E121D0066FDFC /* OAuthLoginController.m */,
 			);
 			name = WeiboEngine;
 			sourceTree = "<group>";

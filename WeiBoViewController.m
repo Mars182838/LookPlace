@@ -87,6 +87,7 @@
     self.view.frame = CGRectMake(0, 0, 320, 480);
     [UIView commitAnimations];
 }
+
 #pragma mark - 
 #pragma mark ShareWiBo Methods
 //微博登入界面
@@ -120,7 +121,6 @@
     [tencentOAuthManager addPrivatePostParamsForASI:postPicWeibo];
     
     [postPicWeibo setDelegate:self];
-//    [postPicWeibo setTag:102];
     [postPicWeibo startAsynchronous];
 }
 

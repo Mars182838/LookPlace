@@ -18,6 +18,7 @@
 @synthesize openID = _openID;
 @synthesize openKey = _openKey;
 @synthesize extraInfo = _extraInfo;
+
 - (void) dealloc {
     self.refreshToken = nil;
     self.accessToken = nil;
@@ -29,6 +30,7 @@
     
     [super dealloc];
 }
+
 - (NSString *) description {
     NSString *s = [NSString stringWithFormat:@"accessToken:%@ userID:%@ userName:%@", _accessToken, _userID, _userName];
     return s;

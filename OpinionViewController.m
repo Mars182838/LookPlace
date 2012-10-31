@@ -18,8 +18,8 @@
 @synthesize opinionLabel;
 @synthesize email;
 @synthesize numberLabel;
-@synthesize opinionTextView;
-@synthesize emailTextField;
+@synthesize opinionTextView;//意见输入框
+@synthesize emailTextField;//邮箱输入框
 @synthesize toolbar;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -36,6 +36,10 @@
     [super viewDidLoad];
     emailTextField.delegate = self;
     opinionTextView.delegate = self;
+    self.opinionTextView.inputAccessoryView = toolbar;
+    self.emailTextField.inputAccessoryView = toolbar;
+    emailTextField.keyboardType = UIKeyboardTypeEmailAddress;
+    emailTextField.returnKeyType = UIReturnKeyDone;
     
     toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, HEIGHT, WIDTH, toolBarHeight)];
     toolbar.barStyle = UIBarStyleBlackTranslucent;
@@ -46,11 +50,6 @@
     [hiddenButtonItem release];
     [spaceButtonItem release];
     [toolbar release]; 
-    
-    self.opinionTextView.inputAccessoryView = toolbar;
-    self.emailTextField.inputAccessoryView = toolbar;
-    emailTextField.keyboardType = UIKeyboardTypeEmailAddress;
-    emailTextField.returnKeyType = UIReturnKeyDone;
     //注册键盘开始弹出的通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     //注册键盘消失的通知
@@ -88,6 +87,7 @@
 
 #pragma mark - 
 #pragma mark UITextField Delegate
+//textField开始编辑时调用
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
     NSTimeInterval animationDuration = 0.30f;
@@ -98,7 +98,7 @@
     [UIView commitAnimations];
     return YES;
 }
-
+//textField返回时调用
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     NSTimeInterval animationDuration = 0.30f;

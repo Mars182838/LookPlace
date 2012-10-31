@@ -124,6 +124,7 @@
 - (BOOL) isAlreadyLogin {
     return _tokenModel.accessToken?YES:NO;
 }
+
 - (NSDictionary *) getCommonParams {
     NSDictionary *dict = nil;
     if (_weiboType == SINA_WEIBO) {
@@ -143,6 +144,7 @@
     }
     return dict;
 }
+
 - (void) addPrivatePostParamsForASI:(ASIFormDataRequest *)request {
     NSDictionary *dict = [self getCommonParams];
     NSArray *keyArray = [dict allKeys];
@@ -151,7 +153,6 @@
         [request setPostValue:[valueArray objectAtIndex:i] forKey:[keyArray objectAtIndex:i]];
     }
 }
-
 
 - (NSString *) getOAuthDomain {
     if (_weiboType == SINA_WEIBO) {
