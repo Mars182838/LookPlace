@@ -27,6 +27,7 @@
 @synthesize baoCunName;//保存名字
 @synthesize imageData;//存储图片
 @synthesize addString;//添加的数据
+@synthesize messageArray;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -274,7 +275,6 @@
     if (self.baoCunName) {
         self.messageLable.textColor = [UIColor grayColor];
         self.messageLable.text = self.buildName;
-
     }
     else
     {   
@@ -319,9 +319,8 @@
             if ([self.addTextField.text isEqualToString:@"添加附加信息"]) {
                 self.addTextField.clearsOnBeginEditing = YES;
             }
-             NSTimeInterval animationDuration = 0.30f;
             [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
-            [UIView setAnimationDuration:animationDuration];
+            [UIView setAnimationDuration:0.30f];
             self.tabelView.frame = CGRectMake(18, -69, 285, 270);
             [UIView commitAnimations];
         }
@@ -362,9 +361,8 @@
     }
     else
     {
-        NSTimeInterval animationDuration = 0.30f;
         [UIView beginAnimations:@"ResizeForKeyboard" context:nil];
-        [UIView setAnimationDuration:animationDuration];
+        [UIView setAnimationDuration:0.30f];
         self.tabelView.frame = CGRectMake(18, -28, 285, 270);
         [UIView commitAnimations];
         return YES;
@@ -405,8 +403,9 @@
                 if (count < array.count) {
                     count = array.count;
                 } 
+                //数据的修改
                 UIImage *image = [self captureView:mapView];
-                [PlaceMessage upDatePlaceName:placeName andPlaceLat:placeLat andPlaceLon:placeLon andPlaceMess:placeMess andCeKaoName:self.messageLable.text andBaoCunName:self.baoCunName andImageData:image andAddMessage:self.addTextField.text fromID:count];
+                [PlaceMessage upDatePlaceName:placeName andPlaceLat:placeLat andPlaceLon:placeLon andPlaceMess:placeMess andCeKaoName:self.messageLable.text andBaoCunName:self.companyTextField.text andImageData:image andAddMessage:self.addTextField.text fromID:count];
                 self.messageLable.textColor = [UIColor grayColor];
                 self.addTextField.textColor = [UIColor grayColor];
                 self.textView.textColor = [UIColor grayColor];
@@ -426,7 +425,7 @@
         }   
         case 1:
         {
-            UIActionSheet *action = [[UIActionSheet alloc] initWithTitle:@"分享信息" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"确定" otherButtonTitles:@"分享到微博",@"分享到短信", nil];
+            UIActionSheet *action = [[UIActionSheet alloc] initWithTitle:@"分享信息" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"分享到短信" otherButtonTitles:@"分享到微博", nil];
             [action showFromToolbar:toolBar];
             [action release];
             break;
@@ -452,17 +451,18 @@
 }
 
 #pragma mark - 
-#pragma mark UIActionSheet  Delegate
+#pragma mark UIActionSheet Delegate
+//buttonIndex 为0代表发送到短信， 为1代表发送到微博
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex == 1) {
+    if (buttonIndex == 0) {
+        [self sendMessageToOtherPerson];
+    }
+    else if (buttonIndex == 1) {
         WeiBoViewController *weibo = [[WeiBoViewController alloc] initWithNibName:nil bundle:nil];
         [self.navigationController pushViewController:weibo animated:YES];
-        weibo.shareString = [NSString stringWithFormat:@"我在%@。\n旁边有%@。详细信息可以参考参考地图: http://maps.google.com/maps?q=loc:%f,%f",self.textView.text,self.messageLable.text,placeLat,placeLon];
+        weibo.shareString = [NSString stringWithFormat:@"我在%@。\n旁边有%@\n详细信息可以参考参考地图: http://maps.google.com/maps?q=loc:%f,%f",self.textView.text,self.messageLable.text,placeLat,placeLon];
         [weibo release];
-    }
-    else if (buttonIndex == 2) {
-        [self sendMessageToOtherPerson];
     }
 }
 

@@ -67,25 +67,15 @@
         [imageview release];
     }
     
-    //用于取消服务视图
-    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    button.frame = CGRectMake(1370, 370, 155, 55);
-    [scrollView addSubview:button];
-    [button addTarget:self action:@selector(removeFuWuShiTu:) forControlEvents:UIControlEventTouchUpInside];
+    UITapGestureRecognizer *tapGesturer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(removeHelpful:)];
+    tapGesturer.numberOfTapsRequired = 2;
+    [scrollView addGestureRecognizer:tapGesturer];
     [scrollView release];
 }
 
 -(void)removeFuWuShiTu:(id)sender
 {
-    
-//    if () {
-//         [self dismissViewControllerAnimated:YES completion:nil];
-//    }
-//    else {
-        RootViewController *root = [[RootViewController alloc] init];
-        [self presentViewController:root animated:YES completion:nil];
-        [root release];
-//    }
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)viewDidUnload

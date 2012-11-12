@@ -7,6 +7,7 @@
 #import "MoreViewController.h"
 #import "PlaceMessage.h"
 #import "DataCollect.h"
+#import "Reachability.h"
 
 @implementation RootViewController
 @synthesize tab;//tabBarController
@@ -22,17 +23,47 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    NSLog(@"现在所在的位置:%f,%f",39.958989,116.353090);
     //创建一个数据库的表
     sqlite3 *dataBase;
     dataBase = [DataCollect openDataBase];
     char *errorMsg; 
     const char *createSql="create table if not exists 'lookPlace' (id integer primary key, placename text,placelat integer,placelon integer,placemess text,cekaoname text,baocunname text,imagedata blob,fujinxinxi text)";
     if (sqlite3_exec(dataBase, createSql, NULL, NULL, &errorMsg) == SQLITE_OK) { 
-        NSLog(@"creat the table is OK");
     }
     if (errorMsg!=nil) {
         NSLog(@"%s",errorMsg);
     }
+    
+    //注册一个通知，为了检测当前用户的网络连接状态
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+    hostReach = [[Reachability reachabilityWithHostName:@"http://www.baidu.com"] retain];
+    [hostReach startNotifier];
+
+    [self performSelectorInBackground:@selector(initViewController) withObject:nil];//调用初始化方法
+}
+
+
+//判断当前网络的连接状态,分别有无连接，3G连接，wifi连接
+- (void)reachabilityChanged:(NSNotification *)notification
+{
+    Reachability *curReachability = [notification object];
+    NSParameterAssert([curReachability isKindOfClass:[Reachability class]]);
+    NetworkStatus curStatus = [curReachability currentReachabilityStatus];
+    NSString *strMessage;
+    if (curStatus == NotReachable) {
+        strMessage = @"现在没有网络连接";
+    }
+    else if(curStatus == ReachableViaWiFi){
+        strMessage = @"您当前选择了Wifi网络连接";
+    }
+    else {
+        strMessage = @"您当前选择了3G网络连接";
+        
+    }
+    UIAlertView *alter = [[UIAlertView alloc] initWithTitle:@"提示" message:strMessage delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    [alter show];
+    [alter release];
     [self performSelectorInBackground:@selector(initViewController) withObject:nil];//调用初始化方法
 }
 
@@ -40,6 +71,13 @@
 {
     self.numberLabel = nil;
     [super viewDidUnload];
+}
+
+-(void)dealloc
+{
+    //注销网络连接状态的通知
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangedNotification object:nil];
+    [super dealloc];
 }
 
 //更新收藏的个数显示

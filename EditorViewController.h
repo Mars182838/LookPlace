@@ -21,11 +21,10 @@
     NSString *imageData;//保存图片
     NSString *addString;//附加信息
     UIAlertView *alterView;//警告框视图
-    
 }
 
 @property (retain, nonatomic) IBOutlet UITableView *tabelView;
-@property (nonatomic, retain)IBOutlet UIButton *saveButton;
+@property (nonatomic, retain) IBOutlet UIButton *saveButton;
 
 @property (nonatomic, retain) UITextField *nameText;//添加公司的名字
 @property (nonatomic, retain) UITextField *addTextField;//显示附加信息
@@ -41,6 +40,7 @@
 @property (nonatomic, retain) NSString *baoCunName;//保存的名字
 @property (nonatomic, retain) NSString *imageData;//保存图片
 @property (nonatomic, retain) NSString *addString;//附加信息
+@property (nonatomic, retain) NSMutableArray *messageArray;
 
 -(UIImage *)captureView:(UIView *)imageView;//截取图片
 

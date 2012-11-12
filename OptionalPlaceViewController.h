@@ -8,20 +8,20 @@
 @interface OptionalPlaceViewController : UIViewController<MKMapViewDelegate,CLLocationManagerDelegate,UITableViewDataSource,UITableViewDelegate,UISearchBarDelegate>
 {
     //类的成员变量
-    PlaceMark *placeMark;
-    Place *place;
-    SearchMassage *search;
-    MKMapView *myMapView;
-    UISearchBar *searchBar;
-    UITableView *myTableView;
-    UITableView *nearTabelView;
+    PlaceMark *placeMark;//自选位置的大头针
+    Place *place;//当前位置的大头针
+    SearchMassage *search;//封装数据的类
+    MKMapView *myMapView;//地图
+    UISearchBar *searchBar;//自选位置的搜索栏
+    UITableView *myTableView;//显示搜所的位子信息
+    UITableView *nearTabelView;//显示附近位置信息
     
     UIView *tView;
     UIToolbar *toolbar;
     
     //map类的成员变量
-    CLLocationDegrees lat;
-    CLLocationDegrees lon;
+    CLLocationDegrees lat;//自选位置的纬度
+    CLLocationDegrees lon;//自选位置的经度
     CLLocation *location;
     BOOL backTabelView;//判断是否弹回tableView
 }

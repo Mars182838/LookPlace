@@ -10,7 +10,7 @@
 
 @implementation WeiBoViewController
 @synthesize textView = _textView;
-@synthesize picker = _picker;
+@synthesize pictureButton;
 @synthesize shareString;
 @synthesize toolBar;
 
@@ -26,15 +26,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    isFirst = YES;
     tencentOAuthManager = [[OAuthManager alloc] initWithOAuthManager:TENCENT_WEIBO];
     //点击UIimageView会自动调出相册
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(5.0f, 120.0f, 105.0f, 120.0f)];
-    imageView.backgroundColor = [UIColor scrollViewTexturedBackgroundColor];
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(100.0f, 240.0f, 130.0f, 100.0f)];
+    imageView.backgroundColor = [UIColor clearColor];
     imageView.userInteractionEnabled = YES;
     myImageView = imageView; 
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickGesture:)];
-    [myImageView addGestureRecognizer:tap];
-    [tap release];
     [self.view addSubview:myImageView];
     [imageView release];
     
@@ -100,9 +98,6 @@
 //分享微博方法
 -(void)shareTencentPicClick:(id)sender
 {
-    UIAlertView *alter = [[UIAlertView alloc] initWithTitle:@"图片分享" message:@"图片分享成功" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:@"cancle", nil];
-    [alter show];
-    [alter release];
     UIImage *image = [myImageView image];
     NSString *text = [self.textView text];
     NSData *data = UIImageJPEGRepresentation(image, 0.8);
@@ -111,7 +106,6 @@
     NSURL *url = [NSURL URLWithString: path];
     
     ASIFormDataRequest *postPicWeibo = [ASIFormDataRequest requestWithURL:url];
-    
     [postPicWeibo setPostValue:@"json" forKey:@"format"];
     [postPicWeibo setPostValue:text forKey:@"content"];
     [postPicWeibo addData:data withFileName:@"test2xx.jpg" andContentType:@"image/jpeg" forKey:@"pic"];
@@ -137,7 +131,6 @@
         return [NSURL URLWithString:url];
     }
     else{
-        
         return  [NSURL URLWithString:baseURL];
     }
 }
@@ -152,6 +145,9 @@
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
+    if (picker.allowsEditing == YES) {
+        image = [info objectForKey:UIImagePickerControllerEditedImage];
+    }
     myImageView.image = image;
     [picker dismissModalViewControllerAnimated:YES];
 }
@@ -161,15 +157,37 @@
     [picker dismissModalViewControllerAnimated:YES];
     
 }
-//获取图片
--(void)clickGesture:(UITapGestureRecognizer *)gesture
+
+#pragma -
+#pragma mark UIAtionSheet Delegate
+//buttonIndex 为0表示照相 1表示从相册中选择图片
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if ([gesture state] == UIGestureRecognizerStateEnded) {
-        UIImagePickerController *ipc = [[UIImagePickerController alloc] init];
-        [ipc setSourceType:UIImagePickerControllerSourceTypePhotoLibrary];
-        [ipc setDelegate:self];
-        [self presentModalViewController:ipc animated:YES];
-        [ipc release];
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];  
+    picker.delegate = self;  
+    switch (buttonIndex) {
+        case 0:
+        {
+            if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) 
+                {
+                    picker.sourceType = UIImagePickerControllerSourceTypeCamera; 
+                    [self presentModalViewController:picker animated:YES];  
+                    [picker release];  
+            }
+            else {
+                UIAlertView *alter = [[UIAlertView alloc] initWithTitle:@"提示" message:@"该设备不支持照相功能" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:nil, nil];
+                [alter show];
+                [alter release];
+            }
+            break;
+        }   
+        case 1:
+        {
+            picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+            [self presentModalViewController:picker animated:YES];  
+            [picker release];  
+            break;
+        }
     }
 }
 
@@ -193,12 +211,43 @@
     return YES;
 }
 
+- (IBAction)ButtonPress:(id)sender {
+    UIButton *button = (UIButton *)sender;
+    switch (button.tag) {
+        case 0:
+        {
+            [self.navigationController popViewControllerAnimated:YES];
+            break;
+        }
+        case 1:
+        {
+            if (isFirst == YES) {
+                 [self enterWeibo];
+                isFirst = NO;
+            }
+            else {
+                [self shareTencentPicClick:nil];
+            }
+            break;
+        }
+        case 2:
+        {
+            UIActionSheet *action = [[UIActionSheet alloc] initWithTitle:@"选择图片" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"拍照" otherButtonTitles:@"相册", nil];
+            action.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
+            action.delegate = self;
+            [action showFromToolbar:toolBar];
+            [action release];
+        }
+    }
+}
+
+
 - (void)viewDidUnload
 {
+    [self setPictureButton:nil];
     [super viewDidUnload];
     self.textView = nil;
     self.toolBar = nil;
-    self.picker = nil;
 }
 
 -(void)dealloc
@@ -210,37 +259,17 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self 
                                                     name:UIKeyboardWillShowNotification 
                                                   object:nil];
-    [_picker release];
     [_textView release];
     [toolBar release];
     [shareString release];
+    [pictureButton release];
     [super dealloc];
 }
+
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-- (IBAction)ButtonPress:(id)sender {
-    UIButton *button = (UIButton *)sender;
-    switch (button.tag) {
-        case 0:
-        {
-            [self.navigationController popViewControllerAnimated:YES];
-            break;
-        }
-        case 1:
-        {
-            [self shareTencentPicClick:nil];
-           
-            break;
-        }
-       case 2:
-        {
-            [self enterWeibo];
-            break;
-        }
-    }
-}
 @end

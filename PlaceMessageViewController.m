@@ -84,12 +84,13 @@
     [UIView commitAnimations];
 }
 //toolBar上面的按钮点击方法
--(void) HiddenKeyBoard
+-(void)HiddenKeyBoard
 {
     [UIView beginAnimations:nil context:nil];
     [UIView setAnimationDuration:0.3];
     [self.textView resignFirstResponder];
     [self.addTextField resignFirstResponder];
+    [companyName resignFirstResponder];
     self.tabelView.frame = CGRectMake(16, 70, 287, 270);
     toolBar.frame = CGRectMake(0, HEIGHT, WIDTH, toolBarHeight);
     [UIView commitAnimations];
@@ -395,7 +396,7 @@
 
 #pragma mark - 
 #pragma mark SaveDataSoure Methods
-//截取图片
+//截取MapView图片
 -(UIImage *)captureView:(UIView *)imageView
 {
     CGRect rect = imageView.frame;
@@ -409,16 +410,8 @@
     UIImage *picImage = [UIImage imageWithCGImage:CGImageCreateWithImageInRect([image CGImage], rect1)];
     return picImage;
 }
-//保存图片
--(void)savePicture:(UIImage *)image andName:(NSString *)name
-{
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png",name]];
-    self.imageData = filePath;
-    BOOL result = [UIImagePNGRepresentation(image) writeToFile:filePath atomically:YES];
-    NSLog(@"图片的存储---%d",result);
-}
 
+//case 0 是表示保存信息到数据库中； case 1 是表示分享信息有短信方式，微博方式 case 2 是返回到上一个操作界面
 - (IBAction)buttonPress:(id)sender {
     UIButton *button = (UIButton *)sender;
     switch (button.tag) {
@@ -456,7 +449,8 @@
         }   
        case 1:
         {
-            UIActionSheet *action = [[UIActionSheet alloc] initWithTitle:@"分享信息" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"确定" otherButtonTitles:@"分享到微博",@"分享到短信", nil];
+            UIActionSheet *action = [[UIActionSheet alloc] initWithTitle:@"分享信息" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"分享到短信" otherButtonTitles:@"分享到微博", nil];
+            action.actionSheetStyle = UIActionSheetStyleBlackTranslucent;
             [action showFromToolbar:toolBar];
             [action release];
             break;
@@ -488,6 +482,7 @@
                 UIAlertView *alter = [[UIAlertView alloc] initWithTitle:@"您没有输入任何信息" message:@" " delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
                 [alter show];
                 [alter release];
+                [self.saveButton setImage:[UIImage imageNamed:@"保存--一般.png"] forState:UIControlStateNormal];
             }
             else {
                 //往数据库添加信息
@@ -517,15 +512,14 @@
 #pragma mark UIActionSheet  Delegate
 -(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex == 1) {
-        WeiBoViewController *weibo = [[WeiBoViewController alloc] initWithNibName:nil bundle:nil];
-        [self.navigationController pushViewController:weibo animated:YES];
-        weibo.shareString = [NSString stringWithFormat:@"我在%@。\n旁边有%@。详细信息可以参考参考地图: http://maps.google.com/maps?q=loc:%f,%f",self.textView.text,self.messageLable.text,placeLat,placeLon];
-        [weibo release];
-        NSLog(@"%@",weibo.shareString);
-    }
-    else if (buttonIndex == 2) {
+    if (buttonIndex == 0) {
         [self sendMessageToOtherPerson];
+    }
+     else if (buttonIndex == 1) {
+        WeiBoViewController *weibo = [[WeiBoViewController alloc] initWithNibName:nil bundle:nil];
+        weibo.shareString = [NSString stringWithFormat:@"我在%@\n旁边有%@\n详细信息可以参考参考地图: http://maps.google.com/maps?q=loc:%f,%f",self.textView.text,self.messageLable.text,placeLat,placeLon];
+         [self.navigationController pushViewController:weibo animated:YES];
+        [weibo release];
     }
 }
 

@@ -12,15 +12,22 @@
 @implementation StorePlaceViewController
 @synthesize myTabelView;
 @synthesize messageArray;//存储数据库里面查询到的数据
-@synthesize button;
+@synthesize button;//控制是否可以编辑
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        messageArray = [[NSMutableArray alloc] initWithCapacity:0];
+       messageArray = [[NSMutableArray alloc] initWithCapacity:0];
     }
     return self;
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    NSLog(@"这是在哪里啊");
+    [myTabelView reloadData];
 }
 
 - (void)viewDidLoad
@@ -29,13 +36,13 @@
     delete = YES;
     myTabelView.delegate = self;
     myTabelView.dataSource = self;
-    
     NSMutableArray *array = [PlaceMessage findAllMessage];
     for (int count = 0; count < [array count]; count++) {
         PlaceMessage *place = (PlaceMessage *)[array objectAtIndex:count];
         [self.messageArray insertObject:place atIndex:0];
     }
     [myTabelView reloadData];
+    NSLog(@"进入了吗");
 }
 
 #pragma mark - 
@@ -123,10 +130,9 @@
         }    
         case 1:
         {
-            //添加位置
-            NowPlaceViewController *nowPlace = [[NowPlaceViewController alloc] initWithNibName:nil bundle:nil];
-            [self.navigationController pushViewController:nowPlace animated:YES];
-            [nowPlace release];
+            CustomTabBarViewController *customTVC = (CustomTabBarViewController *)self.tabBarController;
+            RootViewController *rootVC = (RootViewController *)customTVC.presentingViewController;
+            rootVC.tab.selectedIndex = 2;
             break;
         }
         case 2:

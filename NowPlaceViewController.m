@@ -114,7 +114,7 @@
         CLLocationCoordinate2D touchCoordinate = [self.myMapView convertPoint:touchPoint toCoordinateFromView:self.myMapView];//将触摸得点转换为经纬度。
         //反向解析长按时的大头针的信息
         location = [[CLLocation alloc] initWithLatitude:touchCoordinate.latitude longitude:touchCoordinate.longitude];
-        
+        NSLog(@"%f,%f",touchCoordinate.latitude,touchCoordinate.longitude);
         CLGeocoder *geocoder = [[CLGeocoder alloc] init];
         [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemark,NSError *error){
             
@@ -263,7 +263,7 @@
     [activityView startAnimating];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:jsonString]];
-    id jsonPraser = [NSJSONSerialization JSONObjectWithData:data options:NSJSONWritingPrettyPrinted error:nil];
+    id jsonPraser = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
     search.nearbyArray = [jsonPraser objectForKey:@"results"];
     dispatch_queue_t mainQueue = dispatch_get_main_queue();
     dispatch_async

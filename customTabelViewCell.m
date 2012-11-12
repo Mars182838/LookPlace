@@ -11,7 +11,6 @@
 @implementation customTabelViewCell
 @synthesize nameCell = _nameCell;
 @synthesize addressCell = _addressCell;
-@synthesize image;
 
 -(id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -38,6 +37,13 @@
         self.contentView.backgroundColor = [UIColor whiteColor];
     }
     return self;
+}
+
+-(void)dealloc
+{
+    self.addressCell = nil;
+    self.nameCell = nil;
+    [super dealloc];
 }
 
 @end

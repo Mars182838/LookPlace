@@ -36,8 +36,6 @@
     [super viewDidLoad];
     emailTextField.delegate = self;
     opinionTextView.delegate = self;
-    self.opinionTextView.inputAccessoryView = toolbar;
-    self.emailTextField.inputAccessoryView = toolbar;
     emailTextField.keyboardType = UIKeyboardTypeEmailAddress;
     emailTextField.returnKeyType = UIReturnKeyDone;
     
@@ -47,6 +45,8 @@
     UIBarButtonItem * spaceButtonItem = [[UIBarButtonItem alloc]initWithBarButtonSystemItem: UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     toolbar.items = [NSArray arrayWithObjects:spaceButtonItem,hiddenButtonItem,nil];
     [self.view addSubview:toolbar];
+    self.opinionTextView.inputAccessoryView = toolbar;
+    self.emailTextField.inputAccessoryView = toolbar;
     [hiddenButtonItem release];
     [spaceButtonItem release];
     [toolbar release]; 

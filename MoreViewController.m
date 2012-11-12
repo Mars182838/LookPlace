@@ -85,7 +85,7 @@
         case 4:
         {
         //返回到RootViewController中
-            [self dismissViewControllerAnimated:YES completion:^(){  }];
+            [self dismissViewControllerAnimated:YES completion:nil];
             break;
         }
             
@@ -95,7 +95,7 @@
 -(void)helpful
 {
     FuWuViewController *help = [[FuWuViewController alloc] init];
-    [self presentViewController:help animated:YES completion:^(){ }];
+    [self presentViewController:help animated:YES completion:nil];
     [help release];
 }
 

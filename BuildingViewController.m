@@ -53,7 +53,7 @@
     NSString *jsonData;
     jsonData = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/search/json?location=%f,%f&radius=1000&hl=zh-CN&sensor=true&key=AIzaSyALaqx0MfPsp2aldbZbzEQAq64SwgQfZ0c",buildingLat,buildingLon];
     NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:jsonData]];
-    id jsonPraser = [NSJSONSerialization JSONObjectWithData:data options:NSJSONWritingPrettyPrinted error:nil];
+    id jsonPraser = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
     search.nearbyArray = [jsonPraser objectForKey:@"results"];
     int count = [search.nearbyArray count];
     search.nearbyArray = [search.nearbyArray subarrayWithRange:NSMakeRange(1, count - 2)];
@@ -79,12 +79,12 @@
     CLLocation *location = [[CLLocation alloc] initWithLatitude:cankaoLat longitude:cankaoLon];
     CLLocation *location1 = [[CLLocation alloc] initWithLatitude:buildingLat longitude:buildingLon];
     //计算距离
-    distance = [NSString stringWithFormat:@"%0.0f",[location1 distanceFromLocation:location]];
+    distance = [NSString stringWithFormat:@"%0.2f",[location1 distanceFromLocation:location]/1000];
     [location1 release];
     [location release];
     //计算方向
     direction = [self jisuanFangwei:buildingLat andlon:buildingLon andcankaolat:cankaoLat andcnakaolon:cankaoLon];
-    NSString *detail = [NSString stringWithFormat:@"%@ 距离%@米",direction,distance];
+    NSString *detail = [NSString stringWithFormat:@"%@ 距离%@千米",direction,distance];
     static NSString *indentifer = @"indentifer";
     UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:indentifer];
     if (cell == nil) {
@@ -112,11 +112,11 @@
     cankaoLon = [[[[[search.nearbyArray objectAtIndex:indexPath.row] objectForKey:@"geometry"]objectForKey:@"location"] objectForKey:@"lng"] doubleValue];//参考物的经度
     CLLocation *location = [[CLLocation alloc] initWithLatitude:cankaoLat longitude:cankaoLon];
     CLLocation *location1 = [[CLLocation alloc] initWithLatitude:buildingLat longitude:buildingLon];
-    distance = [NSString stringWithFormat:@"%0.0f",[location1 distanceFromLocation:location]];
+    distance = [NSString stringWithFormat:@"%0.2f",[location1 distanceFromLocation:location]/1000];
     [location release];
     [location1 release];
     direction = [self jisuanFangwei:buildingLat andlon:buildingLon andcankaolat:cankaoLat andcnakaolon:cankaoLon];
-    buildName =[NSString stringWithFormat:@"%@ %@ 距离%@米",[[search.nearbyArray objectAtIndex:indexPath.row] objectForKey:@"name"],direction,distance];
+    buildName =[NSString stringWithFormat:@"%@ %@ 距离%@千米",[[search.nearbyArray objectAtIndex:indexPath.row] objectForKey:@"name"],direction,distance];
     
     [self.navigationController popViewControllerAnimated:YES];
     [delegate passBuildingMessage:buildName];

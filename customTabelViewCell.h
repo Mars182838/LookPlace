@@ -11,6 +11,5 @@
 @interface customTabelViewCell : UITableViewCell
 @property (nonatomic, retain) UILabel *nameCell;
 @property (nonatomic, retain) UILabel *addressCell;
-@property (nonatomic, retain) UIImage *image;
 
 @end

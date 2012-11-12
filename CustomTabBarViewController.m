@@ -16,6 +16,7 @@
 @synthesize buttons;
 @synthesize slideView;
 @synthesize currentSelectIndex;
+@synthesize imageView;
 
 -(void)viewWillAppear:(BOOL)animated
 {

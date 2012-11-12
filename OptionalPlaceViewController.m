@@ -1,13 +1,13 @@
 
 #import "OptionalPlaceViewController.h"
-#import "Const.h"
-#import "Place.h"
-#import "PlaceMark.h"
-#import "AppDelegate.h"
+#import "PlaceMessageViewController.h"
 #import "customTabelViewCell.h"
 #import "RootViewController.h"
-#import "PlaceMessageViewController.h"
 #import "SearchMassage.h"
+#import "AppDelegate.h"
+#import "PlaceMark.h"
+#import "Const.h"
+#import "Place.h"
 #define NumberButton 10
 
 @interface OptionalPlaceViewController ()
@@ -17,11 +17,11 @@
 @implementation OptionalPlaceViewController
 @synthesize myMapView;
 @synthesize myTableView;//显示当前位置的信息
-@synthesize nearTabelView;
-@synthesize searchBar;
-@synthesize activityView;
+@synthesize nearTabelView;//显示附近位置的信息
+@synthesize searchBar;//自己选择位置
+@synthesize activityView;//指示器
 @synthesize toolBar;
-@synthesize search;
+@synthesize search;//
 @synthesize imageButton;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -50,7 +50,7 @@
     search = [[SearchMassage alloc] init];
     [self performSelector:@selector(optionalPlace)];
     
-       //长按手势，获取经纬度
+    //长按手势，获取经纬度
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
     longPress.minimumPressDuration = 1.0f;
     longPress.allowableMovement = 10.0f;
@@ -58,13 +58,12 @@
     [longPress release];
     
     //自定义一个UIview用于实现tabelView
-    //自定义一个UIview用于实现tabelView
     tView = [[UIView alloc] initWithFrame:CGRectMake(0, 410, WIDTH, 160)];
     tView.backgroundColor = [UIColor clearColor];
     
     activityView = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(140, 40, 20, 20)];
     activityView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
-    //neaTabelView
+    //存储附近信息的数组
     nearTabelView = [[UITableView alloc] initWithFrame:CGRectMake(0, 30, 320, 160) style:UITableViewStylePlain];
     nearTabelView.delegate = self;
     nearTabelView.dataSource = self;
@@ -126,15 +125,13 @@
         CLLocationCoordinate2D touchCoordinate = [self.myMapView convertPoint:touchPoint toCoordinateFromView:self.myMapView];//将触摸得点转换为经纬度。
         //解析长按时的地点数据
         location = [[CLLocation alloc] initWithLatitude:touchCoordinate.latitude longitude:touchCoordinate.longitude];
-        placeMark.title = @"没有数据";
-        placeMark.subTitle = @"没有数据了";
         CLGeocoder *geocoder = [[CLGeocoder alloc] init];
         [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemark,NSError *error){
             CLPlacemark *place1 = [placemark objectAtIndex:0];
             if ([place1.thoroughfare length] == 0) {
                 placeMark.title = [NSString stringWithFormat:@"%@",place1.subLocality];//没有街道
             }
-            else if (place1.subThoroughfare == 0) {
+            else if ([place1.subThoroughfare length]== 0) {
                 placeMark.title = [NSString stringWithFormat:@"%@%@",place1.subLocality,place1.thoroughfare];//没有门牌号
             }
             else {
@@ -224,10 +221,10 @@
 
 #pragma mark - 
 #pragma mark JSONParser
+//解析Google的API，获取当前位置的附近信息
 -(void)praserNearybyGOOGLE
 {
     // https://maps.googleapis.com/maps/api/place/search/json?location=%@,%@&radius=1000&sensor=true&key=AIzaSyALaqx0MfPsp2aldbZbzEQAq64SwgQfZ0c
-    
     NSString *jsonData = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/search/json?location=%f,%f&radius=1000&sensor=true&key=AIzaSyALaqx0MfPsp2aldbZbzEQAq64SwgQfZ0c",location.coordinate.latitude,location.coordinate.longitude];    
     NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:jsonData]];
     id jsonPraser = [NSJSONSerialization JSONObjectWithData:data options:NSJSONWritingPrettyPrinted error:nil];
@@ -242,12 +239,14 @@
     dispatch_release(mainQueue);//释放队列
 }
 
+//通过请求Google的API，分类别请求数据
 -(void)chooseButton:(UIButton *)sender
 {
     NSString *jsonString = nil; 
     switch (sender.tag) {
         case 10:
         {
+            [self.imageButton setImage:[UIImage imageNamed:@"b13.jpg"] forState:UIControlStateNormal];
             jsonString = [NSString stringWithFormat:SEARCH_GOOGLE,location.coordinate.latitude,location.coordinate.longitude,@"food"];
             break;
         }
@@ -352,6 +351,7 @@
     return cell;
 }
 
+//nearTableView代表附近位置的信息显示，myTableView是指的自选位置的信息
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (tableView == nearTabelView) {
@@ -503,26 +503,11 @@
     return YES;
 }
 
--(void)searchBar:(UISearchBar *)searchbar textDidChange:(NSString *)searchText
-{
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:0.5];
-    [UIView setAnimationDelegate:self];
-    if ([searchBar.text isEqualToString:@""]) {
-        self.myTableView.frame = CGRectMake(0, -HEIGHT - 44, WIDTH, HEIGHT);
-    }
-    [UIView commitAnimations];
-}
-
 -(BOOL)searchBarShouldEndEditing:(UISearchBar *)search
 {
     backTabelView = NO;
     [self removeTabelView];
     [searchBar resignFirstResponder];
-    if ([searchBar.text isEqualToString:@"查找地点、商户名"]) {
-        self.myTableView.frame = CGRectMake(0, -480, 320, 460);
-    }
-    self.myTableView.frame = CGRectMake(0, 46,WIDTH, 460);
     return YES;
 }
 
@@ -530,16 +515,20 @@
 {
     //https://maps.googleapis.com/maps/api/place/search/json?location=%f,%f&radius=50000&name=%@&sensor=false&key=AIzaSyALaqx0MfPsp2aldbZbzEQAq64SwgQfZ0c
     [searchBar resignFirstResponder];
+     self.myTableView.frame = CGRectMake(0, 46,WIDTH, HEIGHT);
+    //异步下载数据，为了提高用户体验
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     UIActivityIndicatorView *activity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     activity.frame = CGRectMake(130, 180, 30, 30);
     [self.myTableView addSubview:activity];
     [activity startAnimating];
-    NSString *DataUrlString = [[NSString alloc] initWithFormat:@"https://maps.googleapis.com/maps/api/place/search/json?location=%f,%f&radius=50000&hl=zh-CN&name=%@&sensor=false&key=AIzaSyALaqx0MfPsp2aldbZbzEQAq64SwgQfZ0c",location.coordinate.latitude,location.coordinate.longitude,searchBar.text];
+    //解析JSON数据
+    NSString *DataUrlString = [[NSString alloc] initWithFormat:@"https://maps.googleapis.com/maps/api/place/search/json?location=%f,%f&radius=150000&hl=zh-CN&name=%@&sensor=false&key=AIzaSyALaqx0MfPsp2aldbZbzEQAq64SwgQfZ0c",location.coordinate.latitude,location.coordinate.longitude,searchBar.text];
     NSString *jsonData = [DataUrlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];//url不能含有中文
     NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:jsonData]];
-    id jsonPraser = [NSJSONSerialization JSONObjectWithData:data options:NSJSONWritingPrettyPrinted error:nil];
+    id jsonPraser = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
     [DataUrlString release];
+    //将获取到的数据封装，是为了数据和视图分离
     search.searchArray = [jsonPraser objectForKey:@"results"];
     dispatch_queue_t mainQueue = dispatch_get_main_queue();
     dispatch_async(mainQueue, ^{

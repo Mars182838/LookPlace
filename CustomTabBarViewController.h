@@ -20,6 +20,7 @@
 
 @property (nonatomic, retain) NSMutableArray *buttons;
 @property (nonatomic, retain) UIImageView *slideView;
+@property (nonatomic, retain) UIImageView *imageView;
 @property (nonatomic, assign) int currentSelectIndex;
 
 -(void)hideTabBar;

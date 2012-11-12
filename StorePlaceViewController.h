@@ -1,5 +1,6 @@
 
 #import <UIKit/UIKit.h>
+#import "EditorViewController.h"
 
 @interface StorePlaceViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>
 {
