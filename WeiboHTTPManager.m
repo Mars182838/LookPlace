@@ -51,7 +51,6 @@
                 nil];
 	
 	NSURL *url = [self generateURL:SINA_V2_AUTHORIZE params:params];
-//	NSLog(@"url= %@",url);
     return url;
 }
 

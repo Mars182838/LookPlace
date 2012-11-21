@@ -129,8 +129,15 @@
     NSDictionary *dict = nil;
     if (_weiboType == SINA_WEIBO) {
         dict = [NSDictionary dictionaryWithObjectsAndKeys:
-                _tokenModel.accessToken, @"access_token", 
+                _tokenModel.userName, @"name", 
+                _tokenModel.accessToken, @"access_token",
+                _tokenModel.openID, @"openid",
+                _tokenModel.openKey, @"openkey",
+                SINA_APP_KEY, @"oauth_consumer_key",
+                @"2.a", @"oauth_version",
+                @"221.223.249.130", @"clientip",
                 nil];
+
     } else if (_weiboType == TENCENT_WEIBO) {
         dict = [NSDictionary dictionaryWithObjectsAndKeys:
                 _tokenModel.userName, @"name", 

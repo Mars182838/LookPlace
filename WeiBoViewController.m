@@ -28,6 +28,7 @@
     [super viewDidLoad];
     isFirst = YES;
     tencentOAuthManager = [[OAuthManager alloc] initWithOAuthManager:TENCENT_WEIBO];
+//    tencentOAuthManager = [[OAuthManager alloc] initWithOAuthManager:SINA_WEIBO];
     //点击UIimageView会自动调出相册
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(100.0f, 240.0f, 130.0f, 100.0f)];
     imageView.backgroundColor = [UIColor clearColor];

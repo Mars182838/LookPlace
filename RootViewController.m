@@ -25,21 +25,10 @@
     [super viewDidLoad];
     NSLog(@"现在所在的位置:%f,%f",39.958989,116.353090);
     //创建一个数据库的表
-    sqlite3 *dataBase;
-    dataBase = [DataCollect openDataBase];
-    char *errorMsg; 
-    const char *createSql="create table if not exists 'lookPlace' (id integer primary key, placename text,placelat integer,placelon integer,placemess text,cekaoname text,baocunname text,imagedata blob,fujinxinxi text)";
-    if (sqlite3_exec(dataBase, createSql, NULL, NULL, &errorMsg) == SQLITE_OK) { 
-    }
-    if (errorMsg!=nil) {
-        NSLog(@"%s",errorMsg);
-    }
-    
     //注册一个通知，为了检测当前用户的网络连接状态
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
     hostReach = [[Reachability reachabilityWithHostName:@"http://www.baidu.com"] retain];
     [hostReach startNotifier];
-
     [self performSelectorInBackground:@selector(initViewController) withObject:nil];//调用初始化方法
 }
 

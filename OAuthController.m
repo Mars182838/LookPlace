@@ -36,7 +36,7 @@
 {
     [super loadView];
     
-    self.title = @"weibo";
+    self.title = @"微博登入";
     
     _webView = [[UIWebView alloc] initWithFrame:[self.view bounds]];
     [_webView setDelegate:self];
@@ -48,7 +48,6 @@
     else if (_weiboType == TENCENT_WEIBO) {
         url = [weiboHttpManager getTencentOAuthCodeUrl];
     }
-    
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
     [_webView loadRequest:request];
     [request release];
