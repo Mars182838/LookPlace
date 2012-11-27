@@ -34,26 +34,12 @@
 {
     [self location:nil];
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
-    
-//    NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-//    NSString *filePath = [path objectAtIndex:0];
-//    NSString *docPath = [filePath stringByAppendingPathComponent:@"FirstAction"];
-//    NSLog(@"-----%@",docPath);
-//    NSFileManager *fileManager = [NSFileManager defaultManager];
-//    if ([fileManager fileExistsAtPath:docPath] == NO) {
-//        //当程序是第一运行的时候出现帮助界面
-//        [fileManager createDirectoryAtPath:docPath withIntermediateDirectories:YES attributes:nil error:nil];
-//        FuWuViewController *fuWuView = [[FuWuViewController alloc] init];
-//        self.fuwu = fuWuView;
-//        self.window.rootViewController = self.fuwu;
-//        [fuWuView release];
-//    }
-//    else {
-        //不是第一次运行时到主界面
-        RootViewController *rootView = [[RootViewController alloc] initWithNibName:@"RootViewController" bundle:nil];
-        self.root = rootView;
-        self.window.rootViewController = self.root;
-        [rootView release];
+
+    //不是第一次运行时到主界面
+    RootViewController *rootView = [[RootViewController alloc] initWithNibName:@"RootViewController" bundle:nil];
+    self.root = rootView;
+    self.window.rootViewController = self.root;
+    [rootView release];
     
     sqlite3 *dataBase;
     dataBase = [DataCollect openDataBase];
@@ -65,7 +51,6 @@
         NSLog(@"%s",errorMsg);
     }
     [DataCollect closeDataBase];
-//    }
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     return YES;

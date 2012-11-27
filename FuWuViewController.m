@@ -67,7 +67,7 @@
         [imageview release];
     }
     
-    UITapGestureRecognizer *tapGesturer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(removeHelpful:)];
+    UITapGestureRecognizer *tapGesturer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(removeFuWuShiTu:)];
     tapGesturer.numberOfTapsRequired = 2;
     [scrollView addGestureRecognizer:tapGesturer];
     [scrollView release];
