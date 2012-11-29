@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #define ShareApp ((AppDelegate*)[[UIApplication sharedApplication] delegate])
+#define IS_FIRST_RUN  @"isFirstRun"
 @class RootViewController;
 @class NowPlaceViewController;
 @class FuWuViewController;
@@ -21,6 +22,8 @@
     CLLocationCoordinate2D location;
     MKCoordinateRegion theRegion;//地图的缩放级别
     MKPointAnnotation *annotation;
+    
+    BOOL isFirstRun;
 }
 
 @property (strong, nonatomic) UIWindow *window;
@@ -30,6 +33,7 @@
 
 @property (assign,nonatomic) MKCoordinateRegion theRegion;
 @property (assign,nonatomic) CLLocationCoordinate2D location;
+@property (nonatomic, assign) BOOL isFirstRun;
 
 -(void)location:(id)sender;
 

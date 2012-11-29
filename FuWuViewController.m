@@ -16,6 +16,7 @@
 @end
 
 @implementation FuWuViewController
+@synthesize isFirst;
 
 
 #pragma mark - View  lifecycle
@@ -24,6 +25,7 @@
 {
     [super viewDidLoad];
     UIView *view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    view.backgroundColor = [UIColor blackColor];
     self.view = view;
     [view release];
     
@@ -67,15 +69,26 @@
         [imageview release];
     }
     
-    UITapGestureRecognizer *tapGesturer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(removeFuWuShiTu:)];
-    tapGesturer.numberOfTapsRequired = 2;
-    [scrollView addGestureRecognizer:tapGesturer];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.frame = CGRectMake(1260, 380, 260, 60);
+    [button addTarget:self action:@selector(removeFuWuShiTu:) forControlEvents:UIControlEventTouchUpInside];
+    [scrollView addSubview:button];
     [scrollView release];
+    
+    isFirst = [[[NSUserDefaults standardUserDefaults] valueForKey:IS_FIRST] boolValue];
 }
 
 -(void)removeFuWuShiTu:(id)sender
 {
+    if (!isFirst) {
+        [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithBool:YES] forKey:IS_FIRST];
+        RootViewController *rootView = [[RootViewController alloc] initWithNibName:nil bundle:nil];
+        [self presentViewController:rootView  animated:YES completion:nil];
+        [rootView release]; 
+    }
+    
     [self dismissViewControllerAnimated:YES completion:nil];
+
 }
 
 - (void)viewDidUnload

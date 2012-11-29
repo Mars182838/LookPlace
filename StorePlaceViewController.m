@@ -26,7 +26,6 @@
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    NSLog(@"这是在哪里啊");
     [myTabelView reloadData];
 }
 
@@ -42,7 +41,6 @@
         [self.messageArray insertObject:place atIndex:0];
     }
     [myTabelView reloadData];
-    NSLog(@"进入了吗");
 }
 
 #pragma mark - 

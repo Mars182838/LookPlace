@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#define IS_FIRST @"isFirst"
 @interface FuWuViewController : UIViewController
+
+@property (nonatomic, assign) BOOL isFirst;
 
 @end

@@ -21,6 +21,7 @@
 @synthesize fuwu = _fuwu;
 @synthesize root = _root;
 @synthesize nowPlace = _nowPlace;
+@synthesize isFirstRun;
 
 - (void)dealloc
 {
@@ -34,23 +35,31 @@
 {
     [self location:nil];
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
-
-    //不是第一次运行时到主界面
-    RootViewController *rootView = [[RootViewController alloc] initWithNibName:@"RootViewController" bundle:nil];
-    self.root = rootView;
-    self.window.rootViewController = self.root;
-    [rootView release];
-    
-    sqlite3 *dataBase;
-    dataBase = [DataCollect openDataBase];
-    char *errorMsg; 
-    const char *createSql="create table if not exists 'lookPlace' (id integer primary key, placename text,placelat integer,placelon integer,placemess text,cekaoname text,baocunname text,imagedata blob,fujinxinxi text)";
-    if (sqlite3_exec(dataBase, createSql, NULL, NULL, &errorMsg) == SQLITE_OK) { 
+    isFirstRun = [[[NSUserDefaults standardUserDefaults] valueForKey:IS_FIRST_RUN] boolValue];
+    if (!isFirstRun) {
+       [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithBool:YES] forKey:IS_FIRST_RUN] ;
+        FuWuViewController *fuwu = [[FuWuViewController alloc] initWithNibName:nil bundle:nil];
+        fuwu.isFirst = isFirstRun;
+        self.window.rootViewController = fuwu;
+        
+        sqlite3 *dataBase;
+        dataBase = [DataCollect openDataBase];
+        char *errorMsg; 
+        const char *createSql="create table if not exists 'lookPlace' (id integer primary key, placename text,placelat integer,placelon integer,placemess text,cekaoname text,baocunname text,imagedata blob,fujinxinxi text)";
+        if (sqlite3_exec(dataBase, createSql, NULL, NULL, &errorMsg) == SQLITE_OK) { 
+        }
+        if (errorMsg!=nil) {
+            NSLog(@"%s",errorMsg);
+        }
+        [DataCollect closeDataBase];
     }
-    if (errorMsg!=nil) {
-        NSLog(@"%s",errorMsg);
+    else {
+        //不是第一次运行时到主界面
+        RootViewController *rootView = [[RootViewController alloc] initWithNibName:@"RootViewController" bundle:nil];
+        self.root = rootView;
+        self.window.rootViewController = self.root;
+        [rootView release];
     }
-    [DataCollect closeDataBase];
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     return YES;

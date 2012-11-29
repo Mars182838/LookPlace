@@ -5,6 +5,7 @@
 #import "StorePlaceViewController.h"
 #import "NowPlaceViewController.h"
 #import "MoreViewController.h"
+#import "FuWuViewController.h"
 #import "PlaceMessage.h"
 #import "DataCollect.h"
 #import "Reachability.h"
@@ -12,6 +13,15 @@
 @implementation RootViewController
 @synthesize tab;//tabBarController
 @synthesize numberLabel;//个数的显示
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+       
+    }
+    return self;
+}
 
 -(void)didReceiveMemoryWarning
 {
@@ -23,8 +33,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSLog(@"现在所在的位置:%f,%f",39.958989,116.353090);
-    //创建一个数据库的表
+    
     //注册一个通知，为了检测当前用户的网络连接状态
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
     hostReach = [[Reachability reachabilityWithHostName:@"http://www.baidu.com"] retain];
@@ -47,7 +56,7 @@
         strMessage = @"您当前选择了Wifi网络连接";
     }
     else {
-        strMessage = @"您当前选择了3G网络连接";
+        strMessage = @"您当前选择了2G/3G网络连接";
         
     }
     UIAlertView *alter = [[UIAlertView alloc] initWithTitle:@"提示" message:strMessage delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
