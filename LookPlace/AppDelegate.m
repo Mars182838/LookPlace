@@ -41,6 +41,7 @@
         FuWuViewController *fuwu = [[FuWuViewController alloc] initWithNibName:nil bundle:nil];
         fuwu.isFirst = isFirstRun;
         self.window.rootViewController = fuwu;
+        [fuwu release];
         
         sqlite3 *dataBase;
         dataBase = [DataCollect openDataBase];
@@ -81,7 +82,6 @@
 	didUpdateToLocation:(CLLocation *)newLocation
            fromLocation:(CLLocation *)oldLocation;
 {    
-       
     location = [newLocation coordinate];//当前经纬 
     //插针的经纬  有偏移量 
     lat = location.latitude;

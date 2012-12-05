@@ -86,7 +86,6 @@
         [self presentViewController:rootView  animated:YES completion:nil];
         [rootView release]; 
     }
-    
     [self dismissViewControllerAnimated:YES completion:nil];
 
 }

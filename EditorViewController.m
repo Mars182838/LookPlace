@@ -11,7 +11,7 @@
 
 @implementation EditorViewController
 
-@synthesize saveButton;
+@synthesize saveButton = _saveButton;
 @synthesize tabelView;
 @synthesize nameText;//添加公司的名字
 @synthesize addTextField;//显示附加信息

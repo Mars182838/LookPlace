@@ -55,7 +55,7 @@
     longPress.minimumPressDuration = 1.0f;
     longPress.allowableMovement = 10.0f;
     [self.myMapView addGestureRecognizer:longPress];
-    [longPress release];
+   [longPress release];
     
     //自定义一个UIview用于实现tabelView
     tView = [[UIView alloc] initWithFrame:CGRectMake(0, 410, WIDTH, 160)];
@@ -587,6 +587,7 @@
     [toolbar release];
     [searchBar release];
     [search release];
+    [place release];
     [super dealloc];
 }
 

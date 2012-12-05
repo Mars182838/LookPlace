@@ -400,15 +400,14 @@
 -(UIImage *)captureView:(UIView *)imageView
 {
     CGRect rect = imageView.frame;
-    UIGraphicsBeginImageContext(rect.size);
+   UIGraphicsBeginImageContext(rect.size);
     CGContextRef context = UIGraphicsGetCurrentContext();
-    [imageView.layer renderInContext:context];
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
+   [imageView.layer renderInContext:context];
+   UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+   UIGraphicsEndImageContext();
     CGRect rect1 = CGRectMake(90, 0, 90, 90);//创建矩形
-    UIImage *picImage = [UIImage imageWithCGImage:CGImageCreateWithImageInRect([image CGImage], rect1)];
-    return picImage;
+    UIImage *picImage = [[UIImage alloc] initWithCGImage:CGImageCreateWithImageInRect([image CGImage], rect1)];
+    return [picImage autorelease];
 }
 
 //case 0 是表示保存信息到数据库中； case 1 是表示分享信息有短信方式，微博方式 case 2 是返回到上一个操作界面

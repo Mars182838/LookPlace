@@ -18,6 +18,12 @@
 @synthesize currentSelectIndex;
 @synthesize imageView;
 
+-(void)dealloc
+{
+    [buttons release];
+    [super dealloc];
+}
+
 -(void)viewWillAppear:(BOOL)animated
 {
     nameImage = [[NSMutableArray alloc] initWithObjects:@"图标11.png",@"图标12.png",@"图标13.png",@"图标14.png", nil];
@@ -50,7 +56,7 @@
     
     //创建button
     int count = self.viewControllers.count > 5 ? 5:self.viewControllers.count;
-    self.buttons = [NSMutableArray arrayWithCapacity:count];
+    buttons = [NSMutableArray arrayWithCapacity:count];
     float width = 320/count;
     float heigth = self.tabBar.frame.size.height;
     for (int i = 0; i < count; i++) {
@@ -96,11 +102,11 @@
 		[button addSubview:label];
 		[label release];
         
-        [self.buttons addObject:button];
+        [buttons addObject:button];
 		[groundView addSubview:button];
     }
     [groundView release];
-    [self selectedTabBarItem:[self.buttons objectAtIndex:self.selectedIndex]];
+    [self selectedTabBarItem:[buttons objectAtIndex:self.selectedIndex]];
 }
 
 -(void)selectedTabBarItem:(UIButton *)button

@@ -418,6 +418,7 @@
     [nearTabelView release];
     [activityView release];
     [imageButton release];
+    [search release];
     [super dealloc];
 }
 
